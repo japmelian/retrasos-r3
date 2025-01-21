@@ -126,7 +126,7 @@ all_dates = []
 all_ways = ['Ida (LHOS -> LTQV)', 'Vuelta (LTQV -> LHOS)']
 
 for file in os.listdir('data'):
-    if fnmatch(file, '*.csv'):
+    if fnmatch(file, '*-*.csv'):
         _date = file.split('-')[0]
         all_dates.append(datetime.strptime(_date, "%Y%m%d").date())
 
