@@ -5,7 +5,7 @@ import os
 from fnmatch import fnmatch
 from datetime import datetime
 
-st.set_page_config(layout="wide")
+st.set_page_config(layout="wide", page_title="Retrasos línea R3 - Rodalies de Catalunya")
 
 acronimos = {
   "L'Hospitalet de Llobregat": "LHOS",
@@ -119,8 +119,11 @@ with st.container():
                         )
     
     st.write('')
+
+with st.container():
     st.error('**Importante:** Debido a la escasa información proporcionada desde los orígenes de datos es imposible determinar qué trenes o circulaciones han resultado canceladas.')
     st.info('**Nota:** Las paradas han sido renombradas para una mejor visualización de los datos.')
+    
     st.divider()
 
 
@@ -139,9 +142,30 @@ with st.container():
 
     with col1:
         st.markdown('## Visualiza los datos')
-        st.markdown('Selecciona un día y un sentido')
+        
+
+        col1_1, col1_2 = st.columns(2)
+
+        with col1_1:
+            with open('data/retrasos-r3-data.zip', "rb") as f:
+                zip_data = f.read()
+                st.download_button(label="Descargar todos los datos", data=zip_data, file_name="retrasos-r3-data.zip", mime="application/zip")
+
+        with col1_2:
+            correspondencia = pd.read_csv('data/acronimos.csv', sep = ',')
+            correspondencia_csv = correspondencia.to_csv(index = False)
+
+            st.download_button(
+                label="Descargar paradas",
+                data=correspondencia_csv,
+                file_name = 'correspondencia_paradas.csv',
+                mime="text/csv"
+            )
+
 
     with col2:
+        st.markdown('Selecciona un día y un sentido para visualizar las tablas de datos')
+
         col2_1, col2_2 = st.columns(2)
 
         with col2_1:
@@ -198,53 +222,16 @@ with st.container():
                 styled_df = styled_df.format({col: "{:.0f}" for col in data.select_dtypes(include=['number']).columns})
 
     with col3:
-        col3_1, col3_2, col3_3 = st.columns([1, 2, 1])
+        a = 1
 
-        with col3_1:
-            a = 1
-        
-        with col3_2:
-            if 'data' in locals():
-                data_csv = data.to_csv(index=False).encode("utf-8")
-
-                st.download_button(
-                    label="Descargar datos",
-                    data=data_csv,
-                    file_name=f'{_opcion_fecha}-R3-{_opcion_sentido}.csv',
-                    mime="text/csv"
-                )
-
-        with col3_3:
-            a = 1
     with col4:
-        col4_1, col4_2, col4_3 = st.columns([1, 2, 1])
-
-        with col4_1:
-            a = 1
-        
-        with col4_2:
-            if 'data' in locals():
-                correspondencia = pd.read_csv('data/acronimos.csv', sep = ',')
-                correspondencia_csv = correspondencia.to_csv(index = False)
-
-                st.download_button(
-                    label="Descargar paradas",
-                    data=correspondencia_csv,
-                    file_name = 'correspondencia_paradas.csv',
-                    mime="text/csv"
-                )
-
-        with col4_3:
-            a = 1
-        
+        a = 1        
 
 st.write('')
 
 with st.container():
     if 'styled_df' in locals():  # Verificar que df ha sido generado
         st.dataframe(styled_df, hide_index = True, height=800)
-
-st.divider()
 
 st.markdown("""
     ---
