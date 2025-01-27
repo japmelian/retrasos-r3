@@ -243,3 +243,14 @@ st.write('')
 with st.container():
     if 'styled_df' in locals():  # Verificar que df ha sido generado
         st.dataframe(styled_df, hide_index = True, height=800)
+
+st.divider()
+
+st.markdown("""
+    ---
+    Aplicación desarrollada por **José Alberto Pérez Melián** en colaboración con el **Grupo de Defensa de la línea R3 de los Rodalies de Catalunya**
+            
+    Enero de 2025
+            
+    [X/Twitter](https://x.com/japmelian) | [LinkedIn](https://www.linkedin.com/in/japmelian/)  
+    """, unsafe_allow_html=True)
